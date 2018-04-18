@@ -13,7 +13,7 @@
             <div slot="drawer">
                 <group title="导航" style="margin-top:20px;">
                     <cell title="首页" link="/" @click.native="drawerVisibility = false"></cell>
-                    <cell title="网购" link="line/FirstLevel" @click.native="drawerVisibility = false"></cell>
+                    <cell title="网购" link="lineFirst" @click.native="drawerVisibility = false"></cell>
                     <cell title="新品" link="new/FirstLevel" @click.native="drawerVisibility = false"></cell>
                 </group>
                 <group title="会员中心" style="margin-top:20px;">

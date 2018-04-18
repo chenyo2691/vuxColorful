@@ -11,19 +11,24 @@ export default new Router({
             component: () => import('@/view/common/Home'),
         },
         {
-            path: 'lineFirst',
+            path: '/lineFirst',
             name: 'lineFirst',
             component: () => import('@/view/line/First')
         },
         {
-            path: 'lineSecond',
+            path: '/lineSecond',
             name: 'lineSecond',
             component: () => import('@/view/line/Second')
         },
         {
-            path: 'lineThird',
+            path: '/lineThird',
             name: 'lineThird',
             component: () => import('@/view/line/Third')
+        },
+        {
+            path: '/productList',
+            name: 'productList',
+            component: () => import('@/view/line/ProductList')
         }
     ]
 })

@@ -1,15 +1,12 @@
 <template>
     <div>
-        <Twocols :list="list" @click="touchItem"></Twocols>
     </div>
 </template>
 
 <script>
 import api from '@/api/index.js';
-import Twocols from '@/components/Twocols.vue';
 export default {
     components: {
-        Twocols
     },
     mounted() {
         let query = this.$route.query;
@@ -19,48 +16,45 @@ export default {
         if (query.middleCategoryUuid) {
             this.form.middleCategoryUuid = query.middleCategoryUuid;
         }
+        if (query.SubCategoryUuid) {
+            this.form.SubCategoryUuid = query.SubCategoryUuid;
+        }
         this.init();
     },
     data() {
         return {
             form: {
                 MainCategoryUuid: '',
-                middleCategoryUuid: ''
+                middleCategoryUuid: '',
+                SubCategoryUuid: ''
             },
             list: []
         };
     },
     methods: {
         init() {
-            api.online_getsubcategorylist({
+            api.online_getproductlist({
                 language: 'tc',
                 page: 1,
                 pageSize: 5,
                 MainCategoryUuid: this.form.MainCategoryUuid,
                 middleCategoryUuid: this.form.middleCategoryUuid,
+                SubCategoryUuid: this.form.SubCategoryUuid,
             }).then(res => {
                 if (!res.code) {
-                    let list = [];
-                    res.data.subCategoryList.forEach(function (element) {
-                        list.push({
-                            img: element.imageUrl,
-                            title: element.subCategoryName,
-                            subCategoryUuid: element.subCategoryUuid
-                        });
-                    }, this);
-                    this.list = list;
+                    this.list = res.data.productList;
                 }
             });
         },
         touchItem(item) {
-            this.$router.push({
-                name: 'productList',
-                query: {
-                    MainCategoryUuid: this.form.MainCategoryUuid,
-                    middleCategoryUuid: this.form.middleCategoryUuid,
-                    SubCategoryUuid: item.subCategoryUuid,
-                }
-            });
+            // this.$router.push({
+            //     name: 'productList',
+            //     query: {
+            //         MainCategoryUuid: this.form.MainCategoryUuid,
+            //         middleCategoryUuid: this.form.middleCategoryUuid,
+            //         SubCategoryUuid: item.middleCategoryUuid,
+            //     }
+            // });
         }
     }
 };
