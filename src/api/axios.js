@@ -18,6 +18,9 @@ export default function () {
         if (res.code !== 0) {
             console.log('error', res);
         }
+        else {
+            console.log('success', res);
+        }
         return res;
     }, function (error) {
         console.log('网络错误，请稍后再试');
