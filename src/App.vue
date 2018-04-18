@@ -46,12 +46,8 @@
 </template>
 
 <script>
-// import api from '@/api/index.js';
-// import {Loading} from 'vux';
-// import {mapState} from 'vuex';
 import {Radio, Group, Cell, Badge, Drawer, Actionsheet, ButtonTab, ButtonTabItem, ViewBox, XHeader, Tabbar, TabbarItem, Loading, TransferDom} from 'vux'
-// import {mapState, mapActions} from 'vuex';
-import store from '@/store';
+import {mapState, mapActions} from 'vuex';
 export default {
     name: 'app',
     directives: {
@@ -72,16 +68,12 @@ export default {
         Loading,
         Actionsheet
     },
-    mounted() {
-        // this.route = this.$route;
-    },
     computed: {
-        isLoading() {
-            return store.state.vux.isLoading;
-        },
-        route() {
-            return store.state.route;
-        }
+        ...mapState({
+            route: state => state.route,
+            path: state => state.route.path,
+            isLoading: state => state.vux.isLoading,
+        })
     },
     data() {
         return {
@@ -106,6 +98,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions([]),
         onClickBack() {
             // this.drawerVisibility = !this.drawerVisibility;
             this.$router ? this.$router.back() : window.history.back();
