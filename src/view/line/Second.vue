@@ -12,38 +12,48 @@ export default {
         Twocols
     },
     mounted() {
+        let query = this.$route.query;
+        if (query.MainCategoryUuid) {
+            this.form.MainCategoryUuid = query.MainCategoryUuid;
+        }
         this.init();
     },
     data() {
         return {
+            form: {
+                MainCategoryUuid: ''
+            },
             list: []
         };
     },
     methods: {
         init() {
-            api.online_getmaincategorylist({
+            api.online_getmiddlecategorylist({
                 language: 'tc',
                 page: 1,
-                pageSize: 5
+                pageSize: 5,
+                MainCategoryUuid: this.form.MainCategoryUuid
             }).then(res => {
                 if (!res.code) {
                     let list = [];
-                    res.data.mainCategoryList.forEach(function (element) {
+                    res.data.middleCategoryList.forEach(function (element) {
                         list.push({
                             img: element.imageUrl,
-                            title: element.mainCategoryName,
-                            mainCategoryUuid: element.mainCategoryUuid
+                            title: element.middleCategoryName,
+                            middleCategoryUuid: element.middleCategoryUuid
                         });
                     }, this);
+                    console.log(list);
                     this.list = list;
                 }
             });
         },
         touchItem(item) {
             this.$router.push({
-                name: 'lineSecond',
+                name: 'lineThird',
                 query: {
-                    MainCategoryUuid: item.mainCategoryUuid
+                    MainCategoryUuid: this.form.MainCategoryUuid,
+                    middleCategoryUuid: item.middleCategoryUuid,
                 }
             });
         }

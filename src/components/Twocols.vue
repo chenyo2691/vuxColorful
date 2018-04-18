@@ -1,7 +1,7 @@
 <template>
-    <flexbox :gutter="0" wrap="wrap" justify="center">
+    <flexbox :gutter="0" wrap="wrap">
         <flexbox-item :span="1/2" v-for="(item,index) in list" :key="index">
-            <div class="item">
+            <div class="item" @click="itemClick(item)">
                 <img class="img" :src="item.img" alt="">
                 <p class="title">{{item.title}}</p>
             </div>
@@ -16,7 +16,12 @@ export default {
         Flexbox,
         FlexboxItem
     },
-    props: ['list']
+    props: ['list'],
+    methods: {
+        itemClick(data) {
+            this.$emit('click', data);
+        }
+    }
 };
 </script>
 

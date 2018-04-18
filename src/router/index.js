@@ -14,6 +14,16 @@ export default new Router({
             path: 'lineFirst',
             name: 'lineFirst',
             component: () => import('@/view/line/First')
+        },
+        {
+            path: 'lineSecond',
+            name: 'lineSecond',
+            component: () => import('@/view/line/Second')
+        },
+        {
+            path: 'lineThird',
+            name: 'lineThird',
+            component: () => import('@/view/line/Third')
         }
     ]
 })
