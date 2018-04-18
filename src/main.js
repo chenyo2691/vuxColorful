@@ -7,6 +7,11 @@ import FastClick from 'fastclick';
 import router from './router/index.js';
 import './router/routerMgr.js';
 
+import store from '@/store';
+import {sync} from 'vuex-router-sync'
+
+sync(store, router);
+
 require('es6-promise').polyfill();
 
 FastClick.attach(document.body);

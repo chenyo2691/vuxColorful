@@ -1,7 +1,7 @@
 <template>
     <div class="home-container">
         <panel :list="list" :type="type" @on-img-error="onImgError"></panel>
-        <flexbox :gutter="0" wrap="wrap">
+        <flexbox :gutter="0" wrap="wrap" style="margin-top:1rem">
             <flexbox-item :span="1/2" v-for="(item,index) in moduleImgList" :key="index">
                 <div class="module" :style="`background-image:url(${item})`" @click="selectModule(index)"></div>
             </flexbox-item>

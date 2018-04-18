@@ -27,9 +27,14 @@
             <!-- 无tabbar -->
             <!-- body-padding-bottom="55px" -->
             <view-box ref="viewBox" body-padding-top="46px">
-                <x-header slot="header" :title="title" :left-options="leftOptions" :right-options="rightOptions" @on-click-more="onClickMore" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
-                    <span slot="overwrite-left" @click="drawerVisibility = !drawerVisibility">
-                        <x-icon type="navicon" size="35" style="fill:#fff;position:relative;top:-8px;left:-3px;"></x-icon>
+                <x-header slot="header" :title="title" :left-options="leftOptions" :right-options="rightOptions" @on-click-more="onClickMore" style="width:100%;position:absolute;left:0;top:0;z-index:100;background-color:#C19B46;">
+                    <span slot="overwrite-left">
+                        <span @click="onClickBack" v-if="route.path !== '/'">
+                            <x-icon type="ios-arrow-back" size="35" style="fill:#fff;position:relative;top:-8px;left:-3px;"></x-icon>
+                        </span>
+                        <span @click="drawerVisibility = !drawerVisibility">
+                            <x-icon type="navicon" size="35" style="fill:#fff;position:relative;top:-8px;left:-10px;"></x-icon>
+                        </span>
                     </span>
                 </x-header>
                 <router-view class="router-view"></router-view>
@@ -45,7 +50,7 @@
 // import {Loading} from 'vux';
 // import {mapState} from 'vuex';
 import {Radio, Group, Cell, Badge, Drawer, Actionsheet, ButtonTab, ButtonTabItem, ViewBox, XHeader, Tabbar, TabbarItem, Loading, TransferDom} from 'vux'
-import {mapState, mapActions} from 'vuex'
+// import {mapState, mapActions} from 'vuex';
 import store from '@/store';
 export default {
     name: 'app',
@@ -68,24 +73,24 @@ export default {
         Actionsheet
     },
     mounted() {
-        // api.online_getmaincategorylist({language: 'tc', page: 1, pageSize: 5}).then(res => {
-        //   console.log(res, 'ok');
-        // });
+        // this.route = this.$route;
     },
     computed: {
         isLoading() {
             return store.state.vux.isLoading;
+        },
+        route() {
+            return store.state.route;
         }
-        // ...mapState({
-        //   isLoading: state => state.vux.isLoading
-        // })
     },
     data() {
         return {
             title: '缤纷',
             drawerVisibility: false,
             showMode: 'overlay',// overlay push
-            route: this.$route,
+            // route: {
+            //     path: ''
+            // },
             leftOptions: {
                 showBack: true
             },
@@ -101,6 +106,10 @@ export default {
         }
     },
     methods: {
+        onClickBack() {
+            // this.drawerVisibility = !this.drawerVisibility;
+            this.$router ? this.$router.back() : window.history.back();
+        },
         onClickMore() {
             this.showMenu = true
         },
