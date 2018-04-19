@@ -28,10 +28,15 @@
             <!-- body-padding-bottom="55px" -->
             <view-box ref="viewBox" body-padding-top="46px">
                 <x-header slot="header" :title="title" :left-options="leftOptions" :right-options="rightOptions" @on-click-more="onClickMore" style="width:100%;position:absolute;left:0;top:0;z-index:100;background-color:#C19B46;">
-                    <span slot="overwrite-left">
-                        <span @click="onClickBack" v-if="route.path !== '/'">
-                            <x-icon type="ios-arrow-back" size="35" style="fill:#fff;position:relative;top:-8px;left:-3px;"></x-icon>
+                    <span slot="overwrite-left" v-if="route.path !== '/'">
+                        <span @click="onClickBack">
+                            <x-icon type="arrow-left-c" size="35" style="fill:#fff;position:relative;top:-8px;left:-13px;"></x-icon>
                         </span>
+                        <span @click="drawerVisibility = !drawerVisibility">
+                            <x-icon type="navicon" size="35" style="fill:#fff;position:relative;top:-8px;left:-10px;"></x-icon>
+                        </span>
+                    </span>
+                    <span slot="overwrite-left" v-else>
                         <span @click="drawerVisibility = !drawerVisibility">
                             <x-icon type="navicon" size="35" style="fill:#fff;position:relative;top:-8px;left:-10px;"></x-icon>
                         </span>

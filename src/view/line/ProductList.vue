@@ -1,12 +1,15 @@
 <template>
     <div>
+        <ProductList :list="list" @clickCell="touchItem"></ProductList>
     </div>
 </template>
 
 <script>
 import api from '@/api/index.js';
+import ProductList from '@/components/ProductList';
 export default {
     components: {
+        ProductList
     },
     mounted() {
         let query = this.$route.query;
@@ -28,6 +31,7 @@ export default {
                 middleCategoryUuid: '',
                 SubCategoryUuid: ''
             },
+            disabled: false,
             list: []
         };
     },
@@ -47,14 +51,15 @@ export default {
             });
         },
         touchItem(item) {
-            // this.$router.push({
-            //     name: 'productList',
-            //     query: {
-            //         MainCategoryUuid: this.form.MainCategoryUuid,
-            //         middleCategoryUuid: this.form.middleCategoryUuid,
-            //         SubCategoryUuid: item.middleCategoryUuid,
-            //     }
-            // });
+            this.$router.push({
+                name: 'product',
+                query: {
+                    MainCategoryUuid: this.form.MainCategoryUuid,
+                    middleCategoryUuid: this.form.middleCategoryUuid,
+                    SubCategoryUuid: this.form.SubCategoryUuid,
+                    ProductUuid: item.productUuid
+                }
+            });
         }
     }
 };

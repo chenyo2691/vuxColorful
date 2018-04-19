@@ -29,6 +29,16 @@ export default new Router({
             path: '/productList',
             name: 'productList',
             component: () => import('@/view/line/ProductList')
+        },
+        {
+            path: '/product',
+            name: 'product',
+            component: () => import('@/view/line/Product')
+        },
+        {
+            path: '/imgPreview',
+            name: 'imgPreview',
+            component: () => import('@/components/PreviewImg')
         }
     ]
 })

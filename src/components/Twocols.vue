@@ -34,8 +34,10 @@ export default {
   .img {
     width: 100%;
     max-height: 50vw;
+    border-radius: 10%;
   }
   .title {
+    line-height: 1rem;
     overflow: hidden;
     text-overflow: ellipsis;
     word-wrap: break-word;
