@@ -28,13 +28,12 @@
             <cell title="可供订购数量：" value="20"></cell>
             <x-number title="订购数量：" :min="-5" :max="8" :value="1"></x-number>
         </group>
-
     </div>
 </template>
 
 <script>
 import api from '@/api/index.js';
-import {Swiper, Cell, Group, XButton, XNumber, Calendar} from 'vux';
+import {Swiper, Cell, Group, XButton, XNumber, Calendar, Tabbar, TabbarItem} from 'vux';
 export default {
     components: {
         Swiper,
@@ -42,7 +41,9 @@ export default {
         Group,
         XButton,
         XNumber,
-        Calendar
+        Calendar,
+        Tabbar,
+        TabbarItem
     },
     created() {
         // console.log(this.$router.history);
@@ -103,6 +104,7 @@ export default {
                             title: res.data.productInfo.productTCName
                         });
                     }, this);
+                    this.$emit('changeContactInfo', 2);
                 }
             });
             // this.data = res.data.productInfo;

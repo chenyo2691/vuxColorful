@@ -25,8 +25,7 @@
             </div>
 
             <!-- 无tabbar -->
-            <!-- body-padding-bottom="55px" -->
-            <view-box ref="viewBox" body-padding-top="46px">
+            <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="55px">
                 <x-header slot="header" :title="title" :left-options="leftOptions" :right-options="rightOptions" @on-click-more="onClickMore" style="width:100%;position:absolute;left:0;top:0;z-index:100;background-color:#C19B46;">
                     <span slot="overwrite-left" v-if="route.path !== '/'">
                         <span @click="onClickBack">
@@ -42,8 +41,21 @@
                         </span>
                     </span>
                 </x-header>
-                <router-view class="router-view"></router-view>
-                <tabbar slot="bottom"></tabbar>
+                <router-view class="router-view" @changeContactInfo="changeContactInfo"></router-view>
+                <!-- <tabbar slot="bottom"></tabbar> -->
+                <tabbar slot="bottom" v-show="isContantBarShow">
+                    <tabbar-item selected>
+                        <span slot="icon" @click="selectContact">
+                            <x-icon type="ios-person" size="35"></x-icon>
+                        </span>
+                    </tabbar-item>
+                    <tabbar-item>
+                    </tabbar-item>
+                    <tabbar-item link="/component/demo">
+                    </tabbar-item>
+                    <tabbar-item>
+                    </tabbar-item>
+                </tabbar>
             </view-box>
 
         </drawer>
@@ -78,7 +90,10 @@ export default {
             route: state => state.route,
             path: state => state.route.path,
             isLoading: state => state.vux.isLoading,
-        })
+        }),
+        isContantBarShow() {
+            return /product$/.test(this.route.name);
+        },
     },
     data() {
         return {
@@ -99,7 +114,8 @@ export default {
                 'language.noop': '<span class="menu-title">Language</span>',
                 'zh-CN': '中文',
                 'en': 'English'
-            }
+            },
+            contactInfo: ''
         }
     },
     methods: {
@@ -115,6 +131,12 @@ export default {
             console.log(locale);
             // this.$i18n.set(locale)
             // this.$locale.set(locale)
+        },
+        selectContact() {
+            console.log(this.contactInfo);
+        },
+        changeContactInfo(data) {
+            this.contactInfo = data;
         }
     }
 }
