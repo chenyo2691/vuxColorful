@@ -115,7 +115,7 @@ export default {
                 'zh-CN': '中文',
                 'en': 'English'
             },
-            contactInfo: ''
+            contactInfo: null
         }
     },
     methods: {
@@ -133,7 +133,13 @@ export default {
             // this.$locale.set(locale)
         },
         selectContact() {
-            console.log(this.contactInfo);
+            console.log(this.contactInfo.productuuid);
+            this.$router.push({
+                name: 'customerservice',
+                query: {
+                    productuuid: this.contactInfo.productuuid
+                }
+            });
         },
         changeContactInfo(data) {
             this.contactInfo = data;

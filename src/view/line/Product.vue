@@ -5,12 +5,18 @@
             <cell :title="data.productTCName" :inline-desc="data.productENName">
                 <div slot="default">
                     <p>{{data.productNumber}}</p>
-                    <x-button mini :gradients="['#1D62F0', '#19D5FD']">商品详情</x-button>
+                    <!-- <x-button mini :gradients="['#1D62F0', '#19D5FD']">商品详情</x-button> -->
                 </div>
             </cell>
         </group>
 
         <group>
+            <cell title="商品详情" is-link :border-intent="false" :arrow-direction="showContent003 ? 'up' : 'down'" @click.native="showContent003 = !showContent003"></cell>
+
+            <template v-if="showContent003">
+                <cell-box :border-intent="false" class="sub-item">{{data.detailTCContent}}</cell-box>
+            </template>
+
             <cell primary="content">
                 <div slot="icon" style="color:#803386">
                     <p>售价</p>
@@ -19,21 +25,21 @@
                 <p slot="title" style="margin-left:10px;color:#803386">
                     <span>HK ${{data.onlinePurchasePrice}}</span>
                 </p>
-                <x-button slot="default" mini :gradients="['#6F1BFE', '#9479DF']">订购</x-button>
+                <x-button slot="default" mini :gradients="['#1D62F0', '#19D5FD']">订购</x-button>
             </cell>
         </group>
 
         <group>
             <calendar @on-change="calendarChange" v-model="demo3" title="选择交货时间" :replace-text-list="replaceList" :disable-date-function="disableDateFunction" :render-function="buildSlotFn"></calendar>
-            <cell title="可供订购数量：" value="20"></cell>
-            <x-number title="订购数量：" :min="-5" :max="8" :value="1"></x-number>
+            <cell title="可供订购数量：" :value="atp"></cell>
+            <x-number title="订购数量：" :min="0" :max="atp" v-model="buyAmount"></x-number>
         </group>
     </div>
 </template>
 
 <script>
 import api from '@/api/index.js';
-import {Swiper, Cell, Group, XButton, XNumber, Calendar, Tabbar, TabbarItem} from 'vux';
+import {Swiper, Cell, Group, XButton, XNumber, Calendar, Tabbar, TabbarItem, CellBox, dateFormat} from 'vux';
 export default {
     components: {
         Swiper,
@@ -43,6 +49,7 @@ export default {
         XNumber,
         Calendar,
         Tabbar,
+        CellBox,
         TabbarItem
     },
     created() {
@@ -67,6 +74,9 @@ export default {
         }
         if (query.ProductUuid) {
             this.form.ProductUuid = query.ProductUuid;
+            this.$emit('changeContactInfo', {
+                productuuid: query.ProductUuid
+            });
         }
         this.init();
     },
@@ -83,9 +93,13 @@ export default {
                 productENName: '',
                 productNumber: ''
             },
+            quantity: [],
+            atp: 0,
+            buyAmount: 0,
             imgList: [],
             demo3: '',
-            replaceList: {'TODAY': '今'}
+            replaceList: {'TODAY': '今'},
+            showContent003: false
         };
     },
     methods: {
@@ -96,15 +110,21 @@ export default {
             }).then(res => {
                 if (!res.code) {
                     this.data = res.data.productInfo;
+                    // 图片
                     res.data.productInfo.imageName.other.forEach(function (element) {
-                        // let img = element.img.replace(/\s/g, '%20');
                         this.imgList.push({
                             url: 'javascript:',
                             img: element.img,
                             title: res.data.productInfo.productTCName
                         });
                     }, this);
-                    this.$emit('changeContactInfo', 2);
+                    // 日期与存量
+                    res.data.productInfo.quantity.forEach(function (element) {
+                        this.quantity.push({
+                            uploadDate: dateFormat(new Date(element.uploadDate), 'YYYY-MM-DD'),
+                            atp: element.atp
+                        });
+                    }, this);
                 }
             });
             // this.data = res.data.productInfo;
@@ -132,7 +152,8 @@ export default {
             });
         },
         disableDateFunction(date) {
-            if (date.formatedDate === '2018-04-26') {
+            let foundDate = this.quantity.find(v => v.uploadDate === date.formatedDate);
+            if (foundDate) {
                 return false;
             }
             else {
@@ -140,11 +161,17 @@ export default {
             }
         },
         buildSlotFn(line, index, data) {
-            return '';
-            // return /8/.test(data.date) ? '<div style="font-size:12px;text-align:center;"><span style="display:inline-block;width:5px;height:5px;background-color:red;border-radius:50%;"></span></div>' : '<div style="height:19px;"></div>'
+            let foundDate = this.quantity.find(v => v.uploadDate === data.formatedDate);
+            return foundDate !== undefined ? '<div style="font-size:12px;text-align:center;"><span style="display:inline-block;width:5px;height:5px;background-color:red;border-radius:50%;"></span></div>' : '<div style="height:19px;"></div>'
         },
-        calendarChange() {
-
+        calendarChange(date) {
+            let found = this.quantity.find(v => v.uploadDate === date);
+            if (found) {
+                this.atp = found.atp;
+                if (this.atp < this.buyAmount) {
+                    this.buyAmount = this.atp;
+                }
+            }
         }
     }
 };
@@ -155,5 +182,9 @@ export default {
   display: block;
   text-align: center;
   color: #666;
+}
+
+.sub-item {
+  color: #888;
 }
 </style>

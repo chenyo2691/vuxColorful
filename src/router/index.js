@@ -39,6 +39,11 @@ export default new Router({
             path: '/imgPreview',
             name: 'imgPreview',
             component: () => import('@/components/PreviewImg')
+        },
+        {
+            path: '/customerservice',
+            name: 'customerservice',
+            component: () => import('@/components/CustomerService')
         }
     ]
 })
