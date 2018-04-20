@@ -1,6 +1,7 @@
 <template>
     <div>
-        <swiper :list="imgList" :show-desc-mask="false" style="width:85%;margin:0 auto;" :aspect-ratio="500/800" dots-position="center" @click.native="imgPreview"></swiper>
+        <swiper :list="imgList" :show-desc-mask="false" dots-position="center" @click.native="imgPreview"></swiper>
+        <!-- <swiper :list="imgList" :show-desc-mask="false" style="width:85%;margin:0 auto;" :aspect-ratio="500/800" dots-position="center" @click.native="imgPreview"></swiper> -->
         <group>
             <cell :title="data.productTCName" :inline-desc="data.productENName">
                 <div slot="default">
@@ -25,20 +26,24 @@
                 <p slot="title" style="margin-left:10px;color:#803386">
                     <span>HK ${{data.onlinePurchasePrice}}</span>
                 </p>
-                <x-button slot="default" mini :gradients="['#1D62F0', '#19D5FD']">订购</x-button>
+                <x-button slot="default" mini :gradients="['#1D62F0', '#19D5FD']" @click.native="orderProduct">订购</x-button>
             </cell>
         </group>
 
         <group>
-            <calendar @on-change="calendarChange" v-model="demo3" title="选择交货时间" :replace-text-list="replaceList" :disable-date-function="disableDateFunction" :render-function="buildSlotFn"></calendar>
+            <calendar :placeholder="quantity.length === 0 ? '缺货' : '' " @on-change="calendarChange" v-model="deliveryDate" title="选择交货时间" :replace-text-list="replaceList" :disable-date-function="disableDateFunction" :render-function="buildSlotFn"></calendar>
             <cell title="可供订购数量：" :value="atp"></cell>
             <x-number title="订购数量：" :min="0" :max="atp" v-model="buyAmount"></x-number>
         </group>
+
+        <!-- <toast v-model="show4" type="warn">{{msg}}</toast>
+        <toast v-model="show2" type="text">{{$t('success')}}</toast> -->
     </div>
 </template>
 
 <script>
 import api from '@/api/index.js';
+import storage from '@/utils/xStorage.js';
 import {Swiper, Cell, Group, XButton, XNumber, Calendar, Tabbar, TabbarItem, CellBox, dateFormat} from 'vux';
 export default {
     components: {
@@ -97,7 +102,7 @@ export default {
             atp: 0,
             buyAmount: 0,
             imgList: [],
-            demo3: '',
+            deliveryDate: '',
             replaceList: {'TODAY': '今'},
             showContent003: false
         };
@@ -127,14 +132,6 @@ export default {
                     }, this);
                 }
             });
-            // this.data = res.data.productInfo;
-            // // 初始化日期与库存
-            // if (this.calendarDefault && this.data.quantity.length > 0) {
-            //     let first = this.data.quantity[0];
-            //     this.formItem.purchaseQuantity = 0;
-            //     this.atp = first['atp'];
-            //     this.uploadDate = [dateFormat(new Date(first['uploadDate']), 'yyyy-MM-dd')];
-            //     this.calendarDefault.setValue([new Date(first['uploadDate'])]);
         },
         imgPreview() {
             let lst = [];
@@ -172,6 +169,41 @@ export default {
                     this.buyAmount = this.atp;
                 }
             }
+        },
+        orderProduct() {
+            if (this.validate()) {
+                let token = '';
+                let memberInfo = storage.lStorage.getData('memberInfo');
+                if (memberInfo) {
+                    token = memberInfo.token;
+                }
+                api.cart_addproducttocart({
+                    token,
+                    productUuid: this.form.ProductUuid,
+                    purchaseQuantity: this.atp,
+                    salesMode: 'Online',
+                    deliveryDate: this.deliveryDate
+                }).then(res => {
+                    if (!res.code) {
+                        this.$vux.toast.show({
+                            text: '订购成功',
+                            type: 'success',
+                            position: 'middle'
+                        })
+                    }
+                });
+            }
+        },
+        validate() {
+            if (!this.deliveryDate) {
+                this.$vux.toast.text('交货时间不能为空', 'middle');
+                return false;
+            }
+            if (this.buyAmount === 0) {
+                this.$vux.toast.text('订购数量不能为0', 'middle');
+                return false;
+            }
+            return true;
         }
     }
 };

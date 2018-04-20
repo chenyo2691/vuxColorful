@@ -43,7 +43,6 @@ export default {
                             middleCategoryUuid: element.middleCategoryUuid
                         });
                     }, this);
-                    console.log(list);
                     this.list = list;
                 }
             });

@@ -10,6 +10,11 @@ import './router/routerMgr.js';
 import store from '@/store';
 import {sync} from 'vuex-router-sync'
 
+import {AlertPlugin, ToastPlugin} from 'vux'
+
+Vue.use(AlertPlugin)
+Vue.use(ToastPlugin)
+
 sync(store, router);
 
 require('es6-promise').polyfill();

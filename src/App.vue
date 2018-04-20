@@ -4,9 +4,9 @@
         <div v-transfer-dom>
             <loading v-model="isLoading"></loading>
         </div>
-        <div v-transfer-dom>
+        <!-- <div v-transfer-dom>
             <actionsheet :menus="menus" v-model="showMenu" @on-click-menu="changeLocale"></actionsheet>
-        </div>
+        </div> -->
 
         <drawer width="200px;" :show.sync="drawerVisibility" :show-mode="showMode" placement="left" :drawer-style="{'background-color':'#35495e', width: '200px'}">
             <!-- drawer content -->
@@ -17,7 +17,7 @@
                     <cell title="新品" link="new/FirstLevel" @click.native="drawerVisibility = false"></cell>
                 </group>
                 <group title="会员中心" style="margin-top:20px;">
-                    <cell title="登录" link="/" @click.native="drawerVisibility = false"></cell>
+                    <cell title="登录" link="/login" @click.native="drawerVisibility = false"></cell>
                     <cell title="我的订单" link="line/FirstLevel" @click.native="drawerVisibility = false"></cell>
                     <cell title="我的积分" link="new/FirstLevel" @click.native="drawerVisibility = false"></cell>
                     <cell title="咨询" link="consultation/index" @click.native="drawerVisibility = false"></cell>
@@ -26,18 +26,25 @@
 
             <!-- 无tabbar -->
             <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="55px">
-                <x-header slot="header" :title="title" :left-options="leftOptions" :right-options="rightOptions" @on-click-more="onClickMore" style="width:100%;position:absolute;left:0;top:0;z-index:100;background-color:#C19B46;">
-                    <span slot="overwrite-left" v-if="route.path !== '/'">
-                        <span @click="onClickBack">
-                            <x-icon type="arrow-left-c" size="35" style="fill:#fff;position:relative;top:-8px;left:-13px;"></x-icon>
+                <!-- :right-options="rightOptions" @on-click-more="onClickMore"  -->
+                <x-header slot="header" :title="title" :left-options="leftOptions" style="width:100%;position:absolute;left:0;top:0;z-index:100;background-color:#C19B46;">
+                    <span slot="overwrite-left" style="fill:#fff;position:relative;top:-8px;">
+                        <span @click="onClickBack" v-if="route.path !== '/'">
+                            <x-icon type="ios-arrow-back" size="35"></x-icon>
                         </span>
                         <span @click="drawerVisibility = !drawerVisibility">
-                            <x-icon type="navicon" size="35" style="fill:#fff;position:relative;top:-8px;left:-10px;"></x-icon>
+                            <x-icon type="navicon" size="35"></x-icon>
                         </span>
                     </span>
-                    <span slot="overwrite-left" v-else>
+                    <span slot="right" style="fill:#000;position:relative;top:-8px;">
                         <span @click="drawerVisibility = !drawerVisibility">
-                            <x-icon type="navicon" size="35" style="fill:#fff;position:relative;top:-8px;left:-10px;"></x-icon>
+                            <x-icon type="ios-camera" size="35"></x-icon>
+                        </span>
+                        <span @click="drawerVisibility = !drawerVisibility">
+                            <x-icon type="ios-cart" size="35"></x-icon>
+                        </span>
+                        <span @click="drawerVisibility = !drawerVisibility">
+                            <x-icon type="ios-list" size="35"></x-icon>
                         </span>
                     </span>
                 </x-header>
@@ -109,12 +116,12 @@ export default {
             rightOptions: {
                 showMore: true
             },
-            showMenu: false,
-            menus: {
-                'language.noop': '<span class="menu-title">Language</span>',
-                'zh-CN': '中文',
-                'en': 'English'
-            },
+            // showMenu: false,
+            // menus: {
+            //     'language.noop': '<span class="menu-title">Language</span>',
+            //     'zh-CN': '中文',
+            //     'en': 'English'
+            // },
             contactInfo: null
         }
     },
@@ -127,11 +134,11 @@ export default {
         onClickMore() {
             this.showMenu = true
         },
-        changeLocale(locale) {
-            console.log(locale);
-            // this.$i18n.set(locale)
-            // this.$locale.set(locale)
-        },
+        // changeLocale(locale) {
+        //     console.log(locale);
+        // this.$i18n.set(locale)
+        // this.$locale.set(locale)
+        // },
         selectContact() {
             console.log(this.contactInfo.productuuid);
             this.$router.push({

@@ -44,6 +44,11 @@ export default new Router({
             path: '/customerservice',
             name: 'customerservice',
             component: () => import('@/components/CustomerService')
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: () => import('@/view/common/Login')
         }
     ]
 })
