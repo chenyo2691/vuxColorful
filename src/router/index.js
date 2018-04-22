@@ -49,6 +49,11 @@ export default new Router({
             path: '/login',
             name: 'login',
             component: () => import('@/view/common/Login')
+        },
+        {
+            path: '/shop',
+            name: 'shop',
+            component: () => import('@/view/order/Shop')
         }
     ]
 })
